@@ -8,7 +8,8 @@ main()
     // method 1
     printf("enter your name :\t");
     scanf("%[^\n]", arr);
-    fflush(stdin); // clearing buffer
+    fflush(stdin);
+    // clearing buffer
     printf("your name is = %s\n", arr);
     printf("--------------------------------\n");
     //  meethod 2
