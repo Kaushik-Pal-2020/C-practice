@@ -39,7 +39,15 @@ int fib_iterative(int n)
 	}
 	return b;
 }
+void power(int F[2][2], int n)
+{
+	int i;
+	int M[2][2] = {{1, 1}, {1, 0}};
 
+	// n - 1 times multiply the matrix to {{1,0},{0,1}}
+	for (i = 2; i <= n; i++)
+		multiply(F, M);
+}
 int fib_formula(int n)
 {
 	double phi = (1 + sqrt(5)) / 2;
@@ -68,18 +76,9 @@ void multiply(int F[2][2], int M[2][2])
 	F[1][1] = w;
 }
 
-void power(int F[2][2], int n)
-{
-	int i;
-	int M[2][2] = {{1, 1}, {1, 0}};
-
-	// n - 1 times multiply the matrix to {{1,0},{0,1}}
-	for (i = 2; i <= n; i++)
-		multiply(F, M);
-}
 int main()
 {
-	printf("%d", fib(50));
+	printf("%d", fib(5));
 	system("pause");
 	return 0;
 }
