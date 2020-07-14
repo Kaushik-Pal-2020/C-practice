@@ -17,6 +17,7 @@ int peek(struct Stack*);
 int isEmpty(struct Stack*);
 int isFull(struct Stack*);
 void clear(struct Stack*);
+void increaseSize(struct Stack*);
 
 int main()
 {
@@ -26,12 +27,22 @@ int main()
     push(s, 2);
     push(s, 3);
     push(s, 4);
+    display(s);
+    increaseSize(s);
+    increaseSize(s);
+    increaseSize(s);
     push(s, 100);
     display(s);
     clear(s);
     return 0;
 }
 
+void increaseSize(struct Stack *stack)
+{
+    stack->capacity *= 2;
+    stack->arr = (int*)realloc(stack->arr, stack->capacity*sizeof(int));
+    printf("Currently new capacity = %d\n",stack->capacity);
+}
 struct Stack* createStack(int capacity)
 {
     struct Stack *stack = (struct Stack*)malloc(sizeof(struct Stack));
