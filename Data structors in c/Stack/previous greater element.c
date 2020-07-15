@@ -1,3 +1,6 @@
+/*
+  this question is alo known as nearest greater to right
+ */
 #include <stdio.h>
 #include <stdlib.h>
 
