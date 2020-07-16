@@ -36,7 +36,7 @@ int *NSNleft_stack(int arr[], int n)
     clear(stack);
     return left;
 }
-int *NSNright_stack(int arr[], int n)
+int* NSNright_stack(int arr[], int n)
 {
     int *right = (int *)malloc(sizeof(int) * n);
     struct Stack *stack = createStack(n);
@@ -51,12 +51,12 @@ int *NSNright_stack(int arr[], int n)
     }
     while (isEmpty(stack) == -1)
     {
-        right[pop(stack)] = n + 1;
+        right[pop(stack)] = n;
     }
     clear(stack);
     return right;
 }
-int *maximumAreaHistogram(int arr[], int n)
+void maximumAreaHistogram(int arr[], int n)
 {
     int *area = (int *)malloc(n * sizeof(int));
     int *left = NSNleft_stack(arr, n);
@@ -67,25 +67,25 @@ int *maximumAreaHistogram(int arr[], int n)
         width = right[i] - left[i] - 1; // width between histogram
         area[i] = width * arr[i];
         if (area[i] > max)
-            max = arr[i];
+            max = area[i];
     }
     free(left);
     free(right);
     printf("maximum area = %d\n", max);
-    return area;
+    free(area);
 }
 
 int main()
 {
-    int arr[] = {6, 2, 5, 4, 5, 1, 6};
-    int n = sizeof(arr) / sizeof(*arr);
-    int *p = maximumAreaHistogram(arr, n);
-    for (int i = 0; i < n; i++)
+    int n, *arr=NULL,i;
+    scanf("%d",&n);
+    arr = (int*)malloc(n*sizeof(int));
+    for(i=0;i<n;i++)
     {
-        printf("%d->", p[i]);
+        scanf("%d",&arr[i]);
     }
-    printf("\n");
-    free(p);
+    maximumAreaHistogram(arr,n);
+    free(arr);
     return 0;
 }
 struct Stack *createStack(int capacity)
