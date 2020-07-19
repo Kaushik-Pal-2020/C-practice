@@ -24,18 +24,25 @@ int main()
     printf("is empty = %d\n", isEmpty(q));
     enQueue(q, 10);
     enQueue(q, 20);
-    printf("is full = %d\n", isFull(q));
     enQueue(q, 30);
     enQueue(q, 40);
-    printf("is full = %d\n", isFull(q));
-    enQueue(q, 50);
+    printf("Is empty = %d Is full =%d\n", isEmpty(q), isFull(q));
     display(q);
-    printf("is full = %d\n", isFull(q));
+    enQueue(q, 50);
+    printf("Is empty = %d Is full =%d\n", isEmpty(q), isFull(q));
+    display(q);
 
     deQueue(q);
     deQueue(q);
-    display(q);
-    printf("rear = %d and front = %d\n", q->front, q->rear);
+    deQueue(q);
+    deQueue(q);
+    printf("Is empty = %d Is full =%d\n", isEmpty(q), isFull(q));
+    enQueue(q, 60);
+    deQueue(q);
+    printf("Is empty = %d Is full =%d\n", isEmpty(q), isFull(q));
+    deQueue(q);
+    printf("Is empty = %d Is full =%d\n", isEmpty(q), isFull(q));
+
     clear(q);
     return 0;
 }
@@ -44,7 +51,7 @@ struct Queue *createQueue(int capacity)
 {
     struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
     q->capacity = capacity;
-    q->front = q->rear = -1;
+    q->front = q->rear = 0;
     q->arr = (int *)malloc(capacity * sizeof(int));
     return q;
 }
@@ -56,25 +63,16 @@ void enQueue(struct Queue *q, int value)
         printf("Queue is full\n");
         return;
     }
-    if (isEmpty(q))
-    {
-        q->front = q->rear = 0;
-        q->arr[q->rear] = value;
-    }
-    else
-    {
-        q->rear = (q->rear + 1) % q->capacity;
-        q->arr[q->rear] = value;
-    }
+    q->rear = (q->rear + 1) % q->capacity;
+    q->arr[q->rear] = value;
 }
 
 int deQueue(struct Queue *queue)
 {
     if (!isEmpty(queue))
     {
-        int data = queue->arr[queue->front];
         queue->front = (queue->front + 1) % queue->capacity;
-        return data;
+        return queue->arr[queue->front];
     }
     return -999;
 }
@@ -88,14 +86,14 @@ int peek(struct Queue *queue)
 
 int isFull(struct Queue *queue)
 {
-    if (((queue->rear + 1) % queue->capacity) == queue->front)
+    if ((queue->rear + 1) % queue->capacity == queue->front)
         return 1;
     return 0;
 }
 
 int isEmpty(struct Queue *queue)
 {
-    if ((queue->front == -1) && (queue->rear == -1))
+    if (queue->rear == queue->front)
         return 1;
     return 0;
 }
@@ -111,10 +109,7 @@ void display(struct Queue *queue)
     int i;
     printf("====================================\n");
     printf("%16s\n", "Displaying Queue");
-    if (queue->front == 0)
-        i = 0;
-    else
-        i = queue->front + 1;
+    i = queue->front + 1;
     do
     {
         printf("%d ", queue->arr[i]);
