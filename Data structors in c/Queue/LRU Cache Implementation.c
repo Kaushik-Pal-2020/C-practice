@@ -88,7 +88,7 @@ void LRUcache(int *arr, int n, int k)
 
 int main()
 {
-    int arr[] = {1, 2, 3, 1, 4, 5, 2, 2, 1};
+    int arr[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2};
     int n = sizeof(arr) / sizeof(*arr);
     int k = 4;
     LRUcache(arr, n, k);

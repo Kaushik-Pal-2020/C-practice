@@ -22,6 +22,15 @@ void clear(struct Queue *);        // for basic linkedlist queue operation
 
 void display(struct Queue *);
 
+void reverseQueue(struct Queue *queue)
+{
+    if (isEmpty(queue) == 1)
+        return;
+
+    int value = deQueue(queue);
+    reverseQueue(queue);
+    enQueue(queue, value);
+}
 int main()
 {
     struct Queue *q = createQueue();
@@ -31,13 +40,7 @@ int main()
     enQueue(q, 40);
     enQueue(q, 50);
     display(q);
-    enQueue(q, 100);
-    enQueue(q, 110);
-    display(q);
-
-    deQueue(q);
-    deQueue(q);
-    deQueue(q);
+    reverseQueue(q);
     display(q);
     clear(q);
     free(q);
