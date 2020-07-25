@@ -153,7 +153,10 @@ int deleteFront(struct Queue *q)
         struct Node *p = q->front;
         data = p->data;
         q->front = p->next;
-        q->front->prev = p->next = NULL;
+        if (q->front)
+            q->front->prev = p->next = NULL;
+        else
+            q->rear = NULL;
         free(p);
     }
     return data;
@@ -167,7 +170,10 @@ int deleteRear(struct Queue *q)
         struct Node *p = q->rear;
         data = p->data;
         q->rear = p->prev;
-        q->rear->next = p->prev = NULL;
+        if (q->rear)
+            q->rear->next = p->prev = NULL;
+        else
+            q->front = NULL;
         free(p);
     }
     return data;
