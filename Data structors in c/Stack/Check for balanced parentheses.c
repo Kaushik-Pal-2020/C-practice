@@ -20,16 +20,23 @@ bool balancedParenthesis(char *s)
     {
         if(s[i] == '{' ||s[i] == '('||s[i] == '[')
             push(&top, s[i]);
+            
         else if(s[i] == '}' ||s[i] == ']'||s[i] == ')')
-        {
-            if(s[i] == '}' && peek(top)=='{')
-                pop(&top);
-            else if(s[i] == ')' && peek(top)=='(')
-                pop(&top);
-            else if(s[i] == ']' && peek(top)=='[')
-                pop(&top);
+        {   
+            if(isEmpty(top) == 0){
+
+                if(s[i] == '}' && peek(top)=='{')
+                    pop(&top);
+                else if(s[i] == ')' && peek(top)=='(')
+                    pop(&top);
+                else if(s[i] == ']' && peek(top)=='[')
+                    pop(&top);
+                else
+                    return false;
+            }
             else
                 return false;
+            
         }
         i++;
     } 
