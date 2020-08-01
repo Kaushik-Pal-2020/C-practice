@@ -12,6 +12,36 @@ struct BinaryTree
 
 typedef struct BinaryTree BinaryTree;
 
+BinaryTree *create_BinaryTree();
+BinaryTree *build_BinaryTree(BinaryTree *);
+void preOrder_traversal(BinaryTree *);
+void ineOrder_traversal(BinaryTree *);
+void postOrder_traversal(BinaryTree *);
+void clear_BinaryTree(BinaryTree *);
+BinaryTree *search_BinaryTree(BinaryTree *, int);
+int sum_BinaryTree(BinaryTree *);
+int height_BinaryTree(BinaryTree *);
+int count_BinaryTree(BinaryTree *);
+int leaf_BinaryTree(BinaryTree *);
+
+int main()
+{
+    BinaryTree *root = create_BinaryTree();
+    root = build_BinaryTree(root);
+    preOrder_traversal(root);
+    search_BinaryTree(root, 2);
+    int sum = sum_BinaryTree(root);
+    printf("\ntotal sum of all nodes = %d\n", sum);
+
+    int count = height_BinaryTree(root);
+    printf("\nheight of binary tree = %d\n", count);
+
+    int c = count_BinaryTree(root);
+    printf("\ntotal no of nodes = %d\n", c);
+    clear_BinaryTree(root);
+    return 0;
+}
+
 BinaryTree *create_BinaryTree()
 {
     BinaryTree *root = NULL;
@@ -65,7 +95,6 @@ BinaryTree *build_BinaryTree(BinaryTree *root)
     clear_Singly(&queue);
     return root;
 }
-
 void preOrder_traversal(BinaryTree *root)
 {
     if (root == NULL)
@@ -122,12 +151,47 @@ BinaryTree *search_BinaryTree(BinaryTree *root, int key)
             return NULL;
     }
 }
-int main()
+int sum_BinaryTree(BinaryTree *root)
 {
-    BinaryTree *root = create_BinaryTree();
-    root = build_BinaryTree(root);
-    preOrder_traversal(root);
-    search_BinaryTree(root, 2);
-    clear_BinaryTree(root);
-    return 0;
+    if (root)
+    {
+        int x = 0, y = 0;
+        x = sum_BinaryTree(root->lchild);
+        y = sum_BinaryTree(root->rchild);
+        return x + y + root->data;
+    }
+}
+int height_BinaryTree(BinaryTree *root)
+{
+    if (root)
+    {
+        int x = 0, y = 0;
+        x = height_BinaryTree(root->lchild);
+        y = height_BinaryTree(root->rchild);
+        if (x > y)
+            return x + 1;
+        else
+            return y + 1;
+    }
+}
+int count_BinaryTree(BinaryTree *root)
+{
+    if (root)
+    {
+        int x = 0, y = 0;
+        x = count_BinaryTree(root->lchild);
+        y = count_BinaryTree(root->rchild);
+        return x + y + 1;
+    }
+}
+int leaf_BinaryTree(BinaryTree *root)
+{
+    int x = 0, y = 0;
+    if (root)
+    {
+        x = leaf_BinaryTree(root->lchild);
+        y = leaf_BinaryTree(root->rchild);
+        if (!root->lchild && !root->rchild)
+            return x + y + 1;
+    }
 }
