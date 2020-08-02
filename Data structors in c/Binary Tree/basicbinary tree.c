@@ -26,7 +26,7 @@ int count_BinaryTree(BinaryTree *);
 int leaf_BinaryTree(BinaryTree *);
 int maxElement_BinaryTree(BinaryTree *);
 int minElement_BinaryTree(BinaryTree *);
-
+void levelOrderTraversal_BinaryTree(BinaryTree*);
 int main()
 {
     BinaryTree *root = create_BinaryTree();
@@ -53,6 +53,14 @@ int main()
     int min = minElement_BinaryTree(root);
     printf("\nmin element  = %d\n", min);
 
+    levelOrderTraversal_BinaryTree(root);
+    
+    printf("\n\nInOrder of binary Tree\n");
+    ineOrder_traversal(root);
+    
+    printf("\n\nPostOrder of binary Tree\n");
+    postOrder_traversal(root);
+    
     clear_BinaryTree(root);
     return 0;
 }
@@ -242,4 +250,25 @@ int minElement_BinaryTree(BinaryTree *root)
         else
             return x;
     }
+    return INT_MAX;
+}
+void levelOrderTraversal_BinaryTree(BinaryTree* root)
+{
+    Queue_Singly q;
+    createQueue(&q, sizeof(BinaryTree*));
+    enQueue_Singly(&q, &root);
+    printf("\nLevel order traversal\n");
+    BinaryTree **temp = (BinaryTree**)malloc(sizeof(BinaryTree*));
+    while(!isEmpty_Singly(&q))
+    {
+        deQueue_Singly(&q, temp);
+        printf("%d ",(*temp)->data);
+        
+        if((*temp)->lchild)
+            enQueue_Singly(&q, &((*temp)->lchild));
+        if((*temp)->rchild)
+            enQueue_Singly(&q, &((*temp)->rchild));
+    }
+    clear_Singly(&q);
+    free(temp);
 }
