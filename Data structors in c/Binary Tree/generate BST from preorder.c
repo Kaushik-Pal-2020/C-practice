@@ -271,16 +271,7 @@ BST_node *build_BST_preOrder(int *arr, int n)
         else
         {
             peek_Stack(&stack, temp_only_for_peek);
-            if ((arr[i] > (*temp)->data) && (isEmpty_Stack(&stack) == 0) &&
-                (arr[i] < (*temp_only_for_peek)->data))
-            {
-                BST_node *newNode = create_BST_node(arr[i]);
-                i++;
-                (*temp)->rchild = newNode;
-                p = newNode;
-                temp = &p;
-            }
-            else if ((arr[i] > (*temp)->data) && (isEmpty_Stack(&stack) == 1))
+            if ((arr[i] > (*temp)->data) && ((isEmpty_Stack(&stack) == 0) && (arr[i] < (*temp_only_for_peek)->data) || ((isEmpty_Stack(&stack) == 1))))
             {
                 BST_node *newNode = create_BST_node(arr[i]);
                 i++;
