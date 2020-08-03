@@ -29,7 +29,7 @@ BST_node *build_BST_preOrder(int *, int);
 
 int main()
 {
-    int arr[] = {30, 20, 10, 15, 25, 40, 50, 45};
+    int arr[] = {2, 8, 6, 19};
     unsigned int n = sizeof(arr) / sizeof(*arr);
     BST_node *root = build_BST_preOrder(arr, n);
 
@@ -256,7 +256,6 @@ BST_node *build_BST_preOrder(int *arr, int n)
     BST_node **temp = &root;
     BST_node **temp_only_for_peek = (BST_node **)malloc(sizeof(BST_node *));
     BST_node *p = NULL;
-    push_Stack(&stack, &root);
     while (i < n)
     {
         if (arr[i] < (*temp)->data)
@@ -264,14 +263,14 @@ BST_node *build_BST_preOrder(int *arr, int n)
             BST_node *newNode = create_BST_node(arr[i]);
             i++;
             (*temp)->lchild = newNode;
-            push_Stack(&stack, &newNode);
+            push_Stack(&stack, temp);
             p = newNode;
             temp = &p;
         }
         else
         {
             peek_Stack(&stack, temp_only_for_peek);
-            if ((arr[i] > (*temp)->data) && ((isEmpty_Stack(&stack) == 0) && (arr[i] < (*temp_only_for_peek)->data) || ((isEmpty_Stack(&stack) == 1))))
+            if ((arr[i] > (*temp)->data) && ((isEmpty_Stack(&stack) == 0) && (arr[i] < (*temp_only_for_peek)->data) || (isEmpty_Stack(&stack) == 1)))
             {
                 BST_node *newNode = create_BST_node(arr[i]);
                 i++;
