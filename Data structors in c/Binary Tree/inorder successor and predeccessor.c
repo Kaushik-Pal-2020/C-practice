@@ -23,12 +23,11 @@ void clear_BST(BST_node *);
 int minElement_BST(BST_node *);
 int maxElement_BST(BST_node *);
 int height_BST(BST_node *);
-BST_node *Inoder_predecessor_BST(BST_node *);
-BST_node *Inoder_successor_BST(BST_node *);
+BST_node *Inoder_predecessor(BST_node *);
+BST_node *Inoder_successor(BST_node *);
 BST_node *Delete_BST_node(BST_node *, int);
-int leafNodes_BST(BST_node *);
-int nonLeafNodes_BST(BST_node *);
-int countNodes_BST(BST_node *);
+BST_node* Inoder_predecessor_BST(BST_node *, int);
+BST_node *Inoder_successor_BST(BST_node *, int);
 
 
 int main()
@@ -58,15 +57,17 @@ int main()
     int max = maxElement_BST(root);
     printf("\nmaximum element in binary tree = %d\n", max);
 
-    int del_key = 3;
-    Delete_BST_node(root, del_key);
-
-    printf("\n\nInOrder Traversal\n");
-    InOrder_traversal_BST_node(root);
-
-    printf("\n\nPreOrder Traversal\n");
-    PreOrder_traversal_BST_node(root);
-
+    register int i = 0;
+    for(;i<n;i++)
+    {
+        BST_node *t = Inoder_predecessor_BST(root, arr[i]);
+        printf("inorder predescessor of %d  = %d \n",arr[i], (t == NULL) ? -1 : t->data);
+    }
+    for(i=0;i<n;i++)
+    {
+        BST_node *t = Inoder_successor_BST(root, arr[i]);
+        printf("inorder successor of %d  = %d \n",arr[i], (t == NULL) ? -1 : t->data);
+    }
     clear_BST(root);
     return 0;
 }
@@ -221,7 +222,7 @@ int height_BST(BST_node *root)
 }
 // Inoder_predecessor_BST is nothing but finding minValue Node in root tree/sub-tree
 // minValue can be found in left most node of the tree
-BST_node *Inoder_predecessor_BST(BST_node *root)
+BST_node *Inoder_predecessor(BST_node *root)
 {
     while (root && root->rchild)
         root = root->rchild;
@@ -229,7 +230,7 @@ BST_node *Inoder_predecessor_BST(BST_node *root)
 }
 // Inoder_successor_BST is nothing but finding maxValue Node in root tree/sub-tree
 // maxValue can be found in right most node of the tree
-BST_node *Inoder_successor_BST(BST_node *root)
+BST_node *Inoder_successor(BST_node *root)
 {
     while (root && root->lchild)
         root = root->lchild;
@@ -277,13 +278,13 @@ BST_node *Delete_BST_node(BST_node *root, int key)
             // now checking which side has more nodes by height of that sub-tree
             if (height_BST(root->lchild) > height_BST(root->rchild))
             {
-                BST_node *preNode = Inoder_predecessor_BST(root->lchild);
+                BST_node *preNode = Inoder_predecessor(root->lchild);
                 root->data = preNode->data;
                 root->lchild = Delete_BST_node(root->lchild, preNode->data);
             }
             else
             {
-                BST_node *succNode = Inoder_successor_BST(root->rchild);
+                BST_node *succNode = Inoder_successor(root->rchild);
                 root->data = succNode->data;
                 root->rchild = Delete_BST_node(root->rchild, succNode->data);
             }
@@ -291,35 +292,50 @@ BST_node *Delete_BST_node(BST_node *root, int key)
     }
     return root;
 }
-int countNodes_BST(BST_node *root)
+BST_node* Inoder_predecessor_BST(BST_node *root, int key)
 {
-    int x = 0, y = 0;
-    if (root)
+    BST_node *curr = R_search_BST(root, key);
+    if(!curr)
+        return NULL;
+    if(curr->lchild)
+        return Inoder_predecessor(curr->lchild);
+    else
     {
-        x = countNodes_BST(root->lchild);
-        y = countNodes_BST(root->rchild);
-        return x + y + 1;
+        BST_node *successor = NULL, *ancestor = root;
+        while(ancestor->data != key)
+        {
+            if(curr->data < ancestor->data)
+                ancestor = ancestor->lchild;
+            else
+            {
+                successor = ancestor;
+                ancestor = ancestor->rchild;
+            }
+        }
+        return successor;
     }
 }
-int leafNodes_BST(BST_node *root)
+
+BST_node *Inoder_successor_BST(BST_node *root, int key)
 {
-    int x = 0, y = 0;
-    if (root)
+    BST_node *curr = R_search_BST(root, key);
+    if(!curr)
+        return NULL;
+    if(curr->rchild)
+        return Inoder_successor(curr->rchild);
+    else
     {
-        x = leafNodes_BST(root->lchild);
-        y = leafNodes_BST(root->rchild);
-        if (!root->lchild && !root->rchild)
-            return x + y + 1;
-    }
-}
-int nonLeafNodes_BST(BST_node *root)
-{
-    int x = 0, y = 0;
-    if (root)
-    {
-        x = leafNodes_BST(root->lchild);
-        y = leafNodes_BST(root->rchild);
-        if (root->lchild && root->rchild)
-            return x + y + 1;
+        BST_node *successor = NULL, *ancestor = root;
+        while(ancestor->data != key)
+        {
+            if(curr->data < ancestor->data)
+            {
+                successor = ancestor;
+                ancestor = ancestor->lchild;
+            }
+            else
+                ancestor = ancestor->rchild;
+        }
+        return successor;
     }
 }

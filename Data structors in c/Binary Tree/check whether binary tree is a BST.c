@@ -26,9 +26,9 @@ int height_BST(BST_node *);
 BST_node *Inoder_predecessor_BST(BST_node *);
 BST_node *Inoder_successor_BST(BST_node *);
 BST_node *Delete_BST_node(BST_node *, int);
-int leafNodes_BST(BST_node *);
-int nonLeafNodes_BST(BST_node *);
 int countNodes_BST(BST_node *);
+int isBST_space(BST_node *);
+void InOrder_insert(BST_node *,int *);
 
 
 int main()
@@ -58,14 +58,11 @@ int main()
     int max = maxElement_BST(root);
     printf("\nmaximum element in binary tree = %d\n", max);
 
-    int del_key = 3;
-    Delete_BST_node(root, del_key);
+    if(isBST_space(root) == 1)
+        printf("Yes, it is a BST\n");
+    else 
+        printf("No, it is not a BST\n");
 
-    printf("\n\nInOrder Traversal\n");
-    InOrder_traversal_BST_node(root);
-
-    printf("\n\nPreOrder Traversal\n");
-    PreOrder_traversal_BST_node(root);
 
     clear_BST(root);
     return 0;
@@ -301,25 +298,35 @@ int countNodes_BST(BST_node *root)
         return x + y + 1;
     }
 }
-int leafNodes_BST(BST_node *root)
+// in this method we are storing in-order traversal in aux-array
+// then traversing whole array and checking if next element is greater or not
+// if it is greater then no BST; at-last it returns yes BST
+// time complexity : O(n)
+// space complexity : O(n)
+int isBST_space(BST_node *root)
 {
-    int x = 0, y = 0;
-    if (root)
+    int n = countNodes_BST(root);
+    int *arr = (int *)malloc(n*sizeof(int));
+    InOrder_insert(root, arr);
+    register int i = 0;
+    for(;i<n-1;i++)
     {
-        x = leafNodes_BST(root->lchild);
-        y = leafNodes_BST(root->rchild);
-        if (!root->lchild && !root->rchild)
-            return x + y + 1;
+        if(arr[i] > arr[i+1])
+        {
+            free(arr);
+            return 0;
+        }
     }
+    free(arr);
+    return 1;
 }
-int nonLeafNodes_BST(BST_node *root)
+void InOrder_insert(BST_node *root,int *arr)
 {
-    int x = 0, y = 0;
-    if (root)
+    static unsigned int i = 0;
+    if(root)
     {
-        x = leafNodes_BST(root->lchild);
-        y = leafNodes_BST(root->rchild);
-        if (root->lchild && root->rchild)
-            return x + y + 1;
+        InOrder_insert(root->lchild,arr);
+        arr[i++] = root->data;
+        InOrder_insert(root->rchild,arr);
     }
 }
