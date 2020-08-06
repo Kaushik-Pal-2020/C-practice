@@ -352,10 +352,6 @@ int checkIs_BST_Inorder(BST_node *root)
 {
     static int prevValue = INT_MIN;
     static unsigned short flag = 1;
-    // if (!root)
-    //     return 1;
-    // else if (!flag)
-    //     return 0;
     if (root && flag)
     {
         checkIs_BST_Inorder(root->lchild);
