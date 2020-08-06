@@ -28,9 +28,10 @@ BST_node *Inoder_successor_BST(BST_node *);
 BST_node *Delete_BST_node(BST_node *, int);
 int countNodes_BST(BST_node *);
 int isBST_space(BST_node *);
-void InOrder_insert(BST_node *,int *);
-
-
+void InOrder_insert(BST_node *, int *);
+int checkIs_BST(BST_node *);
+int checkIs_BST_util(BST_node *, int, int);
+int checkIs_BST_Inorder(BST_node *);
 int main()
 {
     int arr[] = {12, 5, 15, 3, 7, 13, 17, 1, 9, 19};
@@ -58,11 +59,10 @@ int main()
     int max = maxElement_BST(root);
     printf("\nmaximum element in binary tree = %d\n", max);
 
-    if(isBST_space(root) == 1)
+    if (checkIs_BST_Inorder(root) == 1)
         printf("Yes, it is a BST\n");
-    else 
+    else
         printf("No, it is not a BST\n");
-
 
     clear_BST(root);
     return 0;
@@ -306,12 +306,12 @@ int countNodes_BST(BST_node *root)
 int isBST_space(BST_node *root)
 {
     int n = countNodes_BST(root);
-    int *arr = (int *)malloc(n*sizeof(int));
+    int *arr = (int *)malloc(n * sizeof(int));
     InOrder_insert(root, arr);
     register int i = 0;
-    for(;i<n-1;i++)
+    for (; i < n - 1; i++)
     {
-        if(arr[i] > arr[i+1])
+        if (arr[i] > arr[i + 1])
         {
             free(arr);
             return 0;
@@ -320,13 +320,50 @@ int isBST_space(BST_node *root)
     free(arr);
     return 1;
 }
-void InOrder_insert(BST_node *root,int *arr)
+void InOrder_insert(BST_node *root, int *arr)
 {
     static unsigned int i = 0;
-    if(root)
+    if (root)
     {
-        InOrder_insert(root->lchild,arr);
+        InOrder_insert(root->lchild, arr);
         arr[i++] = root->data;
-        InOrder_insert(root->rchild,arr);
+        InOrder_insert(root->rchild, arr);
+    }
+}
+int checkIs_BST(BST_node *root)
+{
+    return checkIs_BST_util(root, INT_MIN, INT_MAX);
+}
+
+int checkIs_BST_util(BST_node *root, int minValue, int maxValue)
+{
+    if (!root)
+        return 1;
+    if (root->data > minValue && root->data < maxValue)
+    {
+        checkIs_BST_util(root->lchild, minValue, root->data);
+        checkIs_BST_util(root->rchild, root->data, minValue);
+        return 1;
+    }
+    else
+        return 0;
+}
+int checkIs_BST_Inorder(BST_node *root)
+{
+    static int prevValue = INT_MIN;
+    static unsigned short flag = 1;
+    // if (!root)
+    //     return 1;
+    // else if (!flag)
+    //     return 0;
+    if (root && flag)
+    {
+        checkIs_BST_Inorder(root->lchild);
+        if (root->data > prevValue)
+            prevValue = root->data;
+        else
+            flag = 0;
+        checkIs_BST_Inorder(root->rchild);
+        return flag;
     }
 }
