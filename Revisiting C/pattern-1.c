@@ -1,3 +1,4 @@
+// output for 5:
 // 5 5 5 5 5 5 5 5 5
 // 5 4 4 4 4 4 4 4 5
 // 5 4 3 3 3 3 3 4 5
@@ -8,7 +9,6 @@
 // 5 4 4 4 4 4 4 4 5
 // 5 5 5 5 5 5 5 5 5
 #include <stdio.h>
-#include <math.h>
 int main()
 {
     int n = 3; // user input
