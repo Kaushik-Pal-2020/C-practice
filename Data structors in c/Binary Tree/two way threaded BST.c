@@ -6,16 +6,16 @@ struct ThreadedBst
     int val;
     struct ThreadedBst *left;
     struct ThreadedBst *right;
-    char rightThread;
+    int rightThread;
+    int leftThread;
 };
 typedef struct ThreadedBst ThreadedBst;
 
-ThreadedBst *insertNode(ThreadedBst *, ThreadedBst *, ThreadedBst *);
+ThreadedBst *insertNode(ThreadedBst *, ThreadedBst *, ThreadedBst *, ThreadedBst *);
 ThreadedBst *buildThreadedBST(int *, int);
 ThreadedBst *createNode(int);
 void linearInorderTraversal(ThreadedBst *);
 void clearThreadedBST(ThreadedBst *);
-
 int main()
 {
     int arr[] = {10, 5, 15, 3, 7};
@@ -25,31 +25,44 @@ int main()
     clearThreadedBST(root);
     return 0;
 }
-ThreadedBst *insertNode(ThreadedBst *root, ThreadedBst *newNode, ThreadedBst *prevNode)
+ThreadedBst *insertNode(ThreadedBst *root, ThreadedBst *newNode, ThreadedBst *prevLeftNode, ThreadedBst *prevRightNode)
 {
     if (!root)
     {
-        if (!prevNode)
+        if (!prevLeftNode && !prevRightNode)
             return newNode;
-        else
-        {
-            newNode->right = prevNode;
-            newNode->rightThread = '1';
-            return newNode;
-        }
+
+        newNode->left = prevRightNode;
+        newNode->right = prevLeftNode;
+
+        if (newNode->left)
+            newNode->leftThread = 1;
+
+        if (newNode->right)
+            newNode->rightThread = 1;
+
+        return newNode;
     }
     else if (root->val > newNode->val)
-        root->left = insertNode(root->left, newNode, root);
+    {
+        if (root->leftThread == 0)
+            root->left = insertNode(root->left, newNode, root, prevRightNode);
+        else
+        {
+            root->left = insertNode(NULL, newNode, root, prevRightNode);
+            root->leftThread = 0;
+        }
+    }
 
     else if (root->val < newNode->val)
     {
-        if (root->rightThread == '0')
-            root->right = insertNode(root->right, newNode, prevNode);
+        if (root->rightThread == 0)
+            root->right = insertNode(root->right, newNode, prevLeftNode, root);
 
         else
         {
-            root->right = insertNode(NULL, newNode, prevNode);
-            root->rightThread = '0';
+            root->right = insertNode(NULL, newNode, prevLeftNode, root);
+            root->rightThread = 0;
         }
     }
     return root;
@@ -62,7 +75,7 @@ ThreadedBst *buildThreadedBST(int *arr, int size)
     for (; i < size; i++)
     {
         temp = createNode(arr[i]);
-        root = insertNode(root, temp, NULL);
+        root = insertNode(root, temp, NULL, NULL);
     }
     return root;
 }
@@ -70,7 +83,7 @@ ThreadedBst *createNode(int val)
 {
     ThreadedBst *newNode = (ThreadedBst *)malloc(sizeof(ThreadedBst));
     newNode->left = newNode->right = NULL;
-    newNode->rightThread = '0';
+    newNode->rightThread = newNode->leftThread = 0;
     newNode->val = val;
     return newNode;
 }
