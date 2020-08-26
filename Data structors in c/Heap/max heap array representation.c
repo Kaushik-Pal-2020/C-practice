@@ -4,8 +4,8 @@
 struct maxheap
 {
     int *arr;
-    int size;
-    int currentIndex;
+    unsigned int size;
+    unsigned int currentIndex;
 };
 typedef struct maxheap maxheap;
 
