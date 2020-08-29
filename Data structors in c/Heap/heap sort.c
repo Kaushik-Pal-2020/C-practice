@@ -10,44 +10,34 @@ struct maxheap
 typedef struct maxheap maxheap;
 
 maxheap *createMaxHeap();
-void increaseSize(maxheap *);
 void insertElement(maxheap *, int);
 int deleteElement(maxheap *);
 void clearHeap(maxheap *);
-
+void heapSort(int *, int);
 int main()
 {
-    maxheap *heap = createMaxHeap();
-    int arr[] = {5, 40, 10, 75, 30, 7};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    for (int i = 0; i < n; i++)
-        insertElement(heap, arr[i]);
-
-    for (int i = 1; i <= heap->size; i++)
-        printf(" %d", deleteElement(heap));
-    clearHeap(heap);
+    int arr[] = {100,90,80,70,60,50,40,30,20,10};
+    heapSort(arr, sizeof(arr) / sizeof(*arr));
+    for (int i = 0; i < sizeof(arr) / sizeof(*arr); i++)
+        printf("%d, ", arr[i]);
     return 0;
 }
-maxheap *createMaxHeap()
+void heapSort(int *arr, int n)
 {
-    int baseSize = 6;
-    maxheap *heap = (maxheap *)malloc(sizeof(maxheap));
-    heap->arr = (int *)malloc(baseSize * sizeof(int));
-    heap->size = baseSize;
-    heap->currentIndex = 0;
-    return heap;
-}
-void increaseSize(maxheap *heap)
-{
-    heap->size = heap->size * 2 - 1;
-    heap->arr = (int *)realloc(heap->arr, heap->size * sizeof(int));
+    maxheap *h = createMaxHeap(n);
+    register int i = 0;
+    for (; i < n; i++)
+        insertElement(h, arr[i]);
+
+    for (i = n - 1; i >= 0; i--)
+        arr[i] = deleteElement(h);
+
+    clearHeap(h);
 }
 void insertElement(maxheap *heap, int val)
 {
     heap->currentIndex++;
     register int i = heap->currentIndex;
-    if (heap->currentIndex > heap->size)
-        increaseSize(heap);
 
     while (i > 1 && val > heap->arr[i / 2])
     {
@@ -85,4 +75,13 @@ void clearHeap(maxheap *heap)
     free(heap->arr);
     free(heap);
     heap = NULL;
+}
+maxheap *createMaxHeap(int size)
+{
+
+    maxheap *heap = (maxheap *)malloc(sizeof(maxheap));
+    heap->size = size + 1;
+    heap->arr = (int *)malloc(heap->size * sizeof(int));
+    heap->currentIndex = 0;
+    return heap;
 }
