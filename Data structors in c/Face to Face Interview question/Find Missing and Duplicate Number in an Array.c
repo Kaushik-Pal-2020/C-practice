@@ -23,7 +23,7 @@ void missingDuplicate(int *arr, int n)
     expression2 = expression2 - sum2; // x^2 - y^2 = c2
 
     int interState = expression2 / expression1; // x^2 - y^2 / x-y = c2/c1; (x+y)(x-y)/(x-y) = c2/c1 ;x+y = c3
-    missing = (interState + expression1) / 2;   // x+y+x-y = c3+c1; x = (c3+c1)/2
-    duplicate = missing - expression1;          // y = x - c1
+    duplicate = (interState + expression1) / 2; // x+y+x-y = c3+c1; x = (c3+c1)/2
+    missing = duplicate - expression1;          // y = x - c1
     printf("Missing Number = %d and Duplicate Number = %d\n", missing, duplicate);
 }
